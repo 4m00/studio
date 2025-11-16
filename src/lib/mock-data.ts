@@ -74,7 +74,7 @@ export const anomaliesData: Anomaly[] = [
   { id: 'ANOM-002', description: 'Нетипичный поставщик услуг для ЦО', date: '14.11.2025', status: 'warning' },
   { id: 'ANOM-003', description: 'Закупка канцтоваров на 250% выше средней', date: '14.11.2025', status: 'warning' },
   { id: 'ANOM-004', description: 'Авансовый платеж без договора (ПЗ №2)', date: '13.11.2025', status: 'critical' },
-  { id 'ANOM-005', description: 'Завышенная цена на запчасти в заявке REQ-0873', date: '12.11.2025', status: 'warning' },
+  { id: 'ANOM-005', description: 'Завышенная цена на запчасти в заявке REQ-0873', date: '12.11.2025', status: 'warning' },
   { id: 'ANOM-006', description: 'Повторный счет-фактура от ООО "ТехСервис"', date: '11.11.2025', status: 'critical' },
 ];
 

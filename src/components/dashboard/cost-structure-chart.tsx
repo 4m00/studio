@@ -27,7 +27,7 @@ const chartConfig = {
     color: "hsl(var(--chart-4))",
   },
   Прочее: {
-    label: variegated"Прочее",
+    label: "Прочее",
     color: "hsl(var(--chart-5))",
   },
 };
