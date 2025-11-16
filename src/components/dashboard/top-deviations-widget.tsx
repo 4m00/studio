@@ -41,11 +41,11 @@ export function TopDeviationsWidget() {
                 <TableCell
                   className={cn(
                     "text-right font-semibold",
-                    item.deviation > 5
-                      ? "text-destructive"
-                      : item.deviation < -5
+                    item.deviation > 0
                       ? "text-success"
-                      : "text-warning"
+                      : item.deviation < 0
+                      ? "text-destructive"
+                      : ""
                   )}
                 >
                   {item.deviation > 0 ? "+" : ""}

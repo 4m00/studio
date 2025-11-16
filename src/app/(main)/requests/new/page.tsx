@@ -1,11 +1,18 @@
 "use client";
 
 import { useState } from "react";
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { Stepper, Step, StepLabel, Button as MuiButton } from "@mui/material";
+import {
+  Card,
+  CardContent,
+  CardDescription,
+  CardFooter,
+  CardHeader,
+  CardTitle,
+} from "@/components/ui/card";
 import { Button } from "@/components/ui/button";
 import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
-import { Textarea } from "@/components/ui/textarea";
 import {
   Select,
   SelectContent,
@@ -13,682 +20,241 @@ import {
   SelectTrigger,
   SelectValue,
 } from "@/components/ui/select";
-import { Progress } from "@/components/ui/progress";
-import { Badge } from "@/components/ui/badge";
+import { Textarea } from "@/components/ui/textarea";
+import { Upload, File, DollarSign, AlertCircle, CheckCircle, Users } from "lucide-react";
+import { Alert, AlertDescription, AlertTitle } from "@/components/ui/alert";
 import { Separator } from "@/components/ui/separator";
-import {
-  AlertCircle,
-  Plus,
-  Trash2,
-  Upload,
-  X,
-  FileText,
-  Save,
-  Send,
-} from "lucide-react";
-import { Alert, AlertDescription } from "@/components/ui/alert";
-import Link from "next/link";
-
-interface ExpenseItem {
-  id: string;
-  category: string;
-  vendor: string;
-  description: string;
-  quantity: number;
-  unit: string;
-  price: number;
-  vat: number;
-}
-
-interface UploadedFile {
-  id: string;
-  name: string;
-  size: number;
-  type: string;
-}
 
 const steps = [
-  { id: 1, name: "Общая информация", completed: false },
-  { id: 2, name: "Позиции расходов", completed: false },
-  { id: 3, name: "Документы", completed: false },
-  { id: 4, name: "Согласование", completed: false },
+  "Основная информация",
+  "Детализация и вложения",
+  "Проверка бюджета и согласование",
 ];
 
-export default function NewRequestPage() {
-  const [currentStep, setCurrentStep] = useState(1);
-  const [expenseItems, setExpenseItems] = useState<ExpenseItem[]>([
-    {
-      id: "1",
-      category: "Запчасти и комплектующие",
-      vendor: "ООО Промтех",
-      description: "Подшипник SKF 6218",
-      quantity: 10,
-      unit: "шт",
-      price: 45000,
-      vat: 20,
-    },
-  ]);
-  const [uploadedFiles, setUploadedFiles] = useState<UploadedFile[]>([
-    { id: "1", name: "Коммерческое предложение.pdf", size: 1200000, type: "pdf" },
-    { id: "2", name: "Спецификация.xlsx", size: 856000, type: "xlsx" },
-  ]);
-
-  const calculateTotal = () => {
-    return expenseItems.reduce((sum, item) => {
-      const itemTotal = item.quantity * item.price;
-      return sum + itemTotal + (itemTotal * item.vat) / 100;
-    }, 0);
-  };
-
-  const calculateTotalWithoutVat = () => {
-    return expenseItems.reduce(
-      (sum, item) => sum + item.quantity * item.price,
-      0
-    );
-  };
-
-  const calculateTotalVat = () => {
-    return calculateTotal() - calculateTotalWithoutVat();
-  };
-
-  const addExpenseItem = () => {
-    const newItem: ExpenseItem = {
-      id: Date.now().toString(),
-      category: "",
-      vendor: "",
-      description: "",
-      quantity: 1,
-      unit: "шт",
-      price: 0,
-      vat: 20,
-    };
-    setExpenseItems([...expenseItems, newItem]);
-  };
-
-  const removeExpenseItem = (id: string) => {
-    setExpenseItems(expenseItems.filter((item) => item.id !== id));
-  };
-
-  const removeFile = (id: string) => {
-    setUploadedFiles(uploadedFiles.filter((file) => file.id !== id));
-  };
-
-  const formatFileSize = (bytes: number) => {
-    if (bytes < 1024) return bytes + " Б";
-    if (bytes < 1024 * 1024) return (bytes / 1024).toFixed(1) + " КБ";
-    return (bytes / (1024 * 1024)).toFixed(1) + " МБ";
-  };
-
-  const formatCurrency = (amount: number) => {
-    return new Intl.NumberFormat("ru-RU", {
-      style: "currency",
-      currency: "RUB",
-      minimumFractionDigits: 0,
-    }).format(amount);
-  };
-
-  const budgetLimit = 100000000;
-  const budgetUsed = 78500000;
-  const budgetAfter = budgetUsed + calculateTotal();
-  const budgetPercent = (budgetAfter / budgetLimit) * 100;
-
+function Step1({ onNext }) {
   return (
-    <div className="flex flex-col gap-6">
-      <div className="flex justify-between items-start">
-        <div>
-          <div className="flex items-center gap-2">
-            <Link href="/requests">
-              <Button variant="ghost" size="sm">
-                ← Назад
-              </Button>
-            </Link>
-            <h1 className="text-2xl font-semibold">Новая заявка на расход</h1>
-          </div>
-          <p className="text-sm text-muted-foreground mt-1">
-            Автосохранение: 2 минуты назад
-          </p>
-        </div>
-        <div className="flex gap-2">
-          <Button variant="outline">
-            <Save className="mr-2 h-4 w-4" />
-            Сохранить как черновик
-          </Button>
-          <Button>
-            <Send className="mr-2 h-4 w-4" />
-            Отправить на согласование
-          </Button>
-        </div>
+    <div className="space-y-4">
+      <div className="space-y-2">
+        <Label htmlFor="title">
+          Название заявки <span className="text-destructive">*</span>
+        </Label>
+        <Input
+          id="title"
+          placeholder="Например, Закупка запчастей для экскаватора"
+          defaultValue="Закупка запчастей для экскаватора"
+        />
       </div>
+      <div className="space-y-2">
+        <Label htmlFor="department">
+          Подразделение (ЦФО) <span className="text-destructive">*</span>
+        </Label>
+        <Select defaultValue="dp1-r3">
+          <SelectTrigger>
+            <SelectValue placeholder="Выберите подразделение" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="dp1-r3">ДП №1 / Рудник №3</SelectItem>
+            <SelectItem value="co">Центральный офис</SelectItem>
+            <SelectItem value="pz2">Перерабатывающий завод №2</SelectItem>
+            <SelectItem value="sl">Служба логистики</SelectItem>
+          </SelectContent>
+        </Select>
+      </div>
+      <div className="space-y-2">
+        <Label htmlFor="justification">
+          Обоснование <span className="text-destructive">*</span>
+        </Label>
+        <Textarea
+          id="justification"
+          placeholder="Опишите цель и необходимость расхода"
+          rows={4}
+          defaultValue="Требуется срочный ремонт экскаватора в связи с выходом из строя гидравлической системы."
+        />
+      </div>
+      <Button onClick={onNext} className="mt-4">Далее</Button>
+    </div>
+  );
+}
 
-      <div className="flex items-center justify-between mb-4">
-        {steps.map((step, index) => (
-          <div key={step.id} className="flex items-center flex-1">
-            <div className="flex flex-col items-center flex-1">
-              <div
-                className={`w-8 h-8 rounded-full flex items-center justify-center text-sm font-medium ${
-                  currentStep > step.id
-                    ? "bg-success text-white"
-                    : currentStep === step.id
-                    ? "bg-primary text-white"
-                    : "bg-muted text-muted-foreground"
-                }`}
-              >
-                {currentStep > step.id ? "✓" : step.id}
-              </div>
-              <span
-                className={`text-xs mt-1 ${
-                  currentStep === step.id
-                    ? "text-foreground font-medium"
-                    : "text-muted-foreground"
-                }`}
-              >
-                {step.name}
-              </span>
+function Step2({ onNext, onBack }) {
+  return (
+    <div className="space-y-4">
+        <div className="grid grid-cols-2 gap-4">
+            <div className="space-y-2">
+                <Label htmlFor="amount">Сумма <span className="text-destructive">*</span></Label>
+                <Input id="amount" type="number" placeholder="250000" defaultValue="250000" />
             </div>
-            {index < steps.length - 1 && (
-              <div
-                className={`h-0.5 flex-1 mx-2 ${
-                  currentStep > step.id ? "bg-success" : "bg-muted"
-                }`}
-              />
-            )}
-          </div>
-        ))}
+            <div className="space-y-2">
+                <Label htmlFor="currency">Валюта</Label>
+                <Select defaultValue="rub">
+                    <SelectTrigger><SelectValue /></SelectTrigger>
+                    <SelectContent>
+                        <SelectItem value="rub">RUB</SelectItem>
+                        <SelectItem value="usd">USD</SelectItem>
+                        <SelectItem value="eur">EUR</SelectItem>
+                    </SelectContent>
+                </Select>
+            </div>
       </div>
-
-      <div className="grid grid-cols-1 lg:grid-cols-3 gap-6">
-        <div className="lg:col-span-2 space-y-6">
-          {currentStep === 1 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Общая информация</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="requestId">Номер заявки</Label>
-                    <Input
-                      id="requestId"
-                      value="REQ-2025-00456"
-                      disabled
-                      className="bg-muted"
-                    />
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="currency">
-                      Валюта <span className="text-destructive">*</span>
-                    </Label>
-                    <Select defaultValue="RUB">
-                      <SelectTrigger id="currency">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="RUB">RUB ₽</SelectItem>
-                        <SelectItem value="USD">USD $</SelectItem>
-                        <SelectItem value="EUR">EUR €</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
+      <div className="space-y-2">
+        <Label>Прикрепленные документы</Label>
+        <div className="flex items-center justify-center w-full">
+            <Label htmlFor="dropzone-file" className="flex flex-col items-center justify-center w-full h-48 border-2 border-dashed rounded-lg cursor-pointer bg-muted hover:bg-muted/80">
+                <div className="flex flex-col items-center justify-center pt-5 pb-6">
+                    <Upload className="w-10 h-10 mb-3 text-muted-foreground" />
+                    <p className="mb-2 text-sm text-muted-foreground"><span className="font-semibold">Нажмите для загрузки</span> или перетащите файлы</p>
+                    <p className="text-xs text-muted-foreground">PDF, XLSX, DOCX, PNG, JPG (до 10MB)</p>
                 </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="title">
-                    Название заявки <span className="text-destructive">*</span>
-                  </Label>
-                  <Input
-                    id="title"
-                    placeholder="Закупка оборудования..."
-                    defaultValue="Закупка запчастей для экскаватора"
-                  />
-                </div>
-
-                <div className="space-y-2">
-                  <Label htmlFor="justification">
-                    Обоснование <span className="text-destructive">*</span>
-                  </Label>
-                  <Textarea
-                    id="justification"
-                    placeholder="Опишите цель и необходимость расхода"
-                    rows={4}
-                    defaultValue="Требуется срочный ремонт экскаватора в связи с выходом из строя гидравлической системы."
-                  />
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="department">
-                      Подразделение <span className="text-destructive">*</span>
-                    </Label>
-                    <Select defaultValue="dp2">
-                      <SelectTrigger id="department">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="dp1">
-                          Добывающее предприятие №1
-                        </SelectItem>
-                        <SelectItem value="dp2">
-                          Добывающее предприятие №2
-                        </SelectItem>
-                        <SelectItem value="pz1">
-                          Перерабатывающий завод №1
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                  <div className="space-y-2">
-                    <Label htmlFor="project">Проект</Label>
-                    <Select>
-                      <SelectTrigger id="project">
-                        <SelectValue placeholder="Выберите проект" />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="mod2025">
-                          Проект модернизации 2025
-                        </SelectItem>
-                        <SelectItem value="exp2025">
-                          Проект расширения 2025
-                        </SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-
-                <div className="grid grid-cols-2 gap-4">
-                  <div className="space-y-2">
-                    <Label htmlFor="period">
-                      Период <span className="text-destructive">*</span>
-                    </Label>
-                    <Select defaultValue="nov2025">
-                      <SelectTrigger id="period">
-                        <SelectValue />
-                      </SelectTrigger>
-                      <SelectContent>
-                        <SelectItem value="nov2025">Ноябрь 2025</SelectItem>
-                        <SelectItem value="dec2025">Декабрь 2025</SelectItem>
-                      </SelectContent>
-                    </Select>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {currentStep === 2 && (
-            <Card>
-              <CardHeader className="flex flex-row items-center justify-between">
-                <CardTitle>Позиции расходов</CardTitle>
-                <Button onClick={addExpenseItem} size="sm">
-                  <Plus className="mr-2 h-4 w-4" />
-                  Добавить позицию
-                </Button>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="space-y-4">
-                  {expenseItems.map((item, index) => (
-                    <div
-                      key={item.id}
-                      className="p-4 border rounded-lg space-y-4"
-                    >
-                      <div className="flex justify-between items-center">
-                        <span className="text-sm font-medium">
-                          Позиция #{index + 1}
-                        </span>
-                        <Button
-                          variant="ghost"
-                          size="sm"
-                          onClick={() => removeExpenseItem(item.id)}
-                        >
-                          <Trash2 className="h-4 w-4 text-destructive" />
-                        </Button>
-                      </div>
-
-                      <div className="grid grid-cols-2 gap-4">
-                        <div className="space-y-2">
-                          <Label>
-                            Статья затрат{" "}
-                            <span className="text-destructive">*</span>
-                          </Label>
-                          <Select defaultValue={item.category}>
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="Запчасти и комплектующие">
-                                Запчасти и комплектующие
-                              </SelectItem>
-                              <SelectItem value="Услуги подрядчиков">
-                                Услуги подрядчиков
-                              </SelectItem>
-                              <SelectItem value="Логистика">
-                                Логистика
-                              </SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label>
-                            Поставщик{" "}
-                            <span className="text-destructive">*</span>
-                          </Label>
-                          <Input
-                            defaultValue={item.vendor}
-                            placeholder="ООО Промтех"
-                          />
-                        </div>
-                      </div>
-
-                      <div className="space-y-2">
-                        <Label>
-                          Описание <span className="text-destructive">*</span>
-                        </Label>
-                        <Input
-                          defaultValue={item.description}
-                          placeholder="Подшипник SKF 6218"
-                        />
-                      </div>
-
-                      <div className="grid grid-cols-5 gap-4">
-                        <div className="space-y-2">
-                          <Label>
-                            Кол-во <span className="text-destructive">*</span>
-                          </Label>
-                          <Input
-                            type="number"
-                            defaultValue={item.quantity}
-                            min="1"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label>
-                            Ед.изм <span className="text-destructive">*</span>
-                          </Label>
-                          <Select defaultValue={item.unit}>
-                            <SelectTrigger>
-                              <SelectValue />
-                            </SelectTrigger>
-                            <SelectContent>
-                              <SelectItem value="шт">шт</SelectItem>
-                              <SelectItem value="кг">кг</SelectItem>
-                              <SelectItem value="м">м</SelectItem>
-                              <SelectItem value="л">л</SelectItem>
-                            </SelectContent>
-                          </Select>
-                        </div>
-                        <div className="space-y-2">
-                          <Label>
-                            Цена <span className="text-destructive">*</span>
-                          </Label>
-                          <Input
-                            type="number"
-                            defaultValue={item.price}
-                            min="0"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label>Сумма</Label>
-                          <Input
-                            value={formatCurrency(item.quantity * item.price)}
-                            disabled
-                            className="bg-muted"
-                          />
-                        </div>
-                        <div className="space-y-2">
-                          <Label>НДС {item.vat}%</Label>
-                          <Input
-                            value={formatCurrency(
-                              (item.quantity * item.price * item.vat) / 100
-                            )}
-                            disabled
-                            className="bg-muted"
-                          />
-                        </div>
-                      </div>
-                    </div>
-                  ))}
-                </div>
-
-                <Separator />
-
-                <div className="flex justify-end">
-                  <div className="space-y-2 w-80">
-                    <div className="flex justify-between text-sm">
-                      <span>Итого без НДС:</span>
-                      <span className="font-semibold">
-                        {formatCurrency(calculateTotalWithoutVat())}
-                      </span>
-                    </div>
-                    <div className="flex justify-between text-sm">
-                      <span>НДС:</span>
-                      <span className="font-semibold">
-                        {formatCurrency(calculateTotalVat())}
-                      </span>
-                    </div>
-                    <Separator />
-                    <div className="flex justify-between text-base font-bold">
-                      <span>ИТОГО:</span>
-                      <span>{formatCurrency(calculateTotal())}</span>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-
-          {currentStep === 3 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Документы</CardTitle>
-              </CardHeader>
-              <CardContent className="space-y-4">
-                <div className="border-2 border-dashed rounded-lg p-12 text-center hover:border-primary transition-colors cursor-pointer">
-                  <Upload className="h-12 w-12 mx-auto text-muted-foreground mb-4" />
-                  <p className="text-sm font-medium mb-1">
-                    Перетащите файлы или нажмите для выбора
-                  </p>
-                  <p className="text-xs text-muted-foreground">
-                    PDF, DOCX, XLSX, JPG, PNG (до 10 МБ)
-                  </p>
-                </div>
-
-                {uploadedFiles.length > 0 && (
-                  <div className="space-y-2">
-                    <Label>Загруженные файлы</Label>
-                    {uploadedFiles.map((file) => (
-                      <div
-                        key={file.id}
-                        className="flex items-center justify-between p-3 border rounded-lg hover:bg-muted/50 transition-colors"
-                      >
-                        <div className="flex items-center gap-3">
-                          <FileText className="h-5 w-5 text-primary" />
-                          <div>
-                            <p className="text-sm font-medium">{file.name}</p>
-                            <p className="text-xs text-muted-foreground">
-                              {formatFileSize(file.size)}
-                            </p>
-                          </div>
-                        </div>
-                        <div className="flex gap-2">
-                          <Button variant="ghost" size="sm">
-                            Просмотр
-                          </Button>
-                          <Button variant="ghost" size="sm">
-                            Скачать
-                          </Button>
-                          <Button
-                            variant="ghost"
-                            size="sm"
-                            onClick={() => removeFile(file.id)}
-                          >
-                            <X className="h-4 w-4 text-destructive" />
-                          </Button>
-                        </div>
-                      </div>
-                    ))}
-                  </div>
-                )}
-              </CardContent>
-            </Card>
-          )}
-
-          {currentStep === 4 && (
-            <Card>
-              <CardHeader>
-                <CardTitle>Маршрут согласования</CardTitle>
-              </CardHeader>
-              <CardContent>
-                <div className="space-y-6">
-                  <div className="flex gap-4">
-                    <div className="flex flex-col items-center">
-                      <div className="w-8 h-8 rounded-full bg-success flex items-center justify-center text-white">
-                        ✓
-                      </div>
-                      <div className="w-0.5 h-16 bg-success" />
-                    </div>
-                    <div className="flex-1 pb-6">
-                      <div className="font-medium">Создана инициатором</div>
-                      <div className="text-sm text-muted-foreground">
-                        Иванов П.С.
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        14.11.2025 15:30
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <div className="flex flex-col items-center">
-                      <div className="w-8 h-8 rounded-full bg-primary flex items-center justify-center text-white">
-                        2
-                      </div>
-                      <div className="w-0.5 h-16 bg-muted" />
-                    </div>
-                    <div className="flex-1 pb-6">
-                      <div className="font-medium">
-                        Согласование руководителя
-                      </div>
-                      <div className="text-sm text-muted-foreground">
-                        Петров И.И.
-                      </div>
-                      <Badge variant="outline" className="mt-1">
-                        SLA: 2 рабочих дня
-                      </Badge>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <div className="flex flex-col items-center">
-                      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground">
-                        3
-                      </div>
-                      <div className="w-0.5 h-16 bg-muted" />
-                    </div>
-                    <div className="flex-1 pb-6">
-                      <div className="font-medium">Бюджетный контроль</div>
-                      <div className="text-sm text-muted-foreground">
-                        Финансовая служба
-                      </div>
-                      <div className="text-xs text-muted-foreground">
-                        Если сумма {">"} 100,000 ₽
-                      </div>
-                    </div>
-                  </div>
-
-                  <div className="flex gap-4">
-                    <div className="flex flex-col items-center">
-                      <div className="w-8 h-8 rounded-full bg-muted flex items-center justify-center text-muted-foreground">
-                        4
-                      </div>
-                    </div>
-                    <div className="flex-1">
-                      <div className="font-medium">Финальное утверждение</div>
-                      <div className="text-sm text-muted-foreground">
-                        Автоматически
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </CardContent>
-            </Card>
-          )}
-        </div>
-
-        <div className="space-y-4">
-          <Card>
-            <CardHeader>
-              <CardTitle className="text-base flex items-center gap-2">
-                <AlertCircle className="h-5 w-5 text-warning" />
-                Бюджетный контроль
-              </CardTitle>
-            </CardHeader>
-            <CardContent className="space-y-4">
-              <div>
-                <div className="text-sm font-medium mb-1">
-                  Лимит бюджета ЦФО
-                </div>
-                <Progress value={budgetPercent} className="h-2" />
-                <div className="text-xs text-muted-foreground mt-1">
-                  Использовано {formatCurrency(budgetUsed)} из{" "}
-                  {formatCurrency(budgetLimit)}
-                </div>
-              </div>
-              <Separator />
-              <div>
-                <div className="text-sm font-medium mb-1">
-                  После этой заявки
-                </div>
-                <div className="text-lg font-bold">
-                  {formatCurrency(budgetAfter)}
-                </div>
-                <div className="text-sm text-muted-foreground">
-                  {budgetPercent.toFixed(1)}% от лимита
-                </div>
-              </div>
-              <Alert>
-                <AlertDescription>
-                  {budgetPercent > 100 ? (
-                    <span className="text-destructive font-medium">
-                      Требуется согласование CFO
-                    </span>
-                  ) : (
-                    <span className="text-success font-medium">
-                      В пределах лимита
-                    </span>
-                  )}
-                </AlertDescription>
-              </Alert>
-            </CardContent>
-          </Card>
-
-          <Card>
-            <CardContent className="pt-6">
-              <div className="text-xs text-muted-foreground space-y-1">
-                <p>
-                  <span className="text-destructive">*</span> - обязательные
-                  поля
-                </p>
-                <p>Все изменения автоматически сохраняются</p>
-              </div>
-            </CardContent>
-          </Card>
+                <Input id="dropzone-file" type="file" className="hidden" multiple />
+            </Label>
         </div>
       </div>
-
-      <div className="flex justify-between border-t pt-4">
-        <Button
-          variant="outline"
-          onClick={() => setCurrentStep(Math.max(1, currentStep - 1))}
-          disabled={currentStep === 1}
-        >
-          Назад
-        </Button>
-        <Button
-          onClick={() => setCurrentStep(Math.min(4, currentStep + 1))}
-          disabled={currentStep === 4}
-        >
-          Далее
-        </Button>
+       <div className="space-y-2 pt-4">
+         <Label>Загруженные файлы</Label>
+         <div className="p-4 border rounded-md space-y-3">
+            <div className="flex items-center justify-between">
+                <div className="flex items-center gap-3">
+                    <File className="h-5 w-5 text-muted-foreground" />
+                    <span className="font-mono text-sm">счет_№123.pdf</span>
+                </div>
+                <span className="text-sm text-muted-foreground">2.1MB</span>
+            </div>
+            <div className="flex items-center justify-between">
+                 <div className="flex items-center gap-3">
+                    <File className="h-5 w-5 text-muted-foreground" />
+                    <span className="font-mono text-sm">спецификация.xlsx</span>
+                </div>
+                <span className="text-sm text-muted-foreground">850KB</span>
+            </div>
+         </div>
+       </div>
+      <div className="flex justify-between mt-4">
+        <Button onClick={onBack} variant="outline">Назад</Button>
+        <Button onClick={onNext}>Далее</Button>
       </div>
     </div>
+  );
+}
+
+function Step3({ onBack }) {
+  const budget = {
+    limit: 500000,
+    spent: 180000,
+    request: 250000
+  };
+  const remaining = budget.limit - budget.spent;
+  const remainingAfter = remaining - budget.request;
+  const isOverBudget = remainingAfter < 0;
+
+  return (
+    <div className="space-y-6">
+      <div>
+        <h3 className="text-lg font-medium flex items-center gap-2"><DollarSign className="h-5 w-5"/>Бюджетный контроль</h3>
+        <Card className="mt-2">
+            <CardContent className="pt-6 space-y-4">
+                <div className="flex justify-between items-center"><span>Лимит по статье "Ремонт оборудования"</span> <span className="font-bold">{budget.limit.toLocaleString()} ₽</span></div>
+                <div className="flex justify-between items-center"><span>Уже израсходовано</span> <span className="font-bold">{budget.spent.toLocaleString()} ₽</span></div>
+                <Separator />
+                <div className="flex justify-between items-center font-medium"><span>Доступный остаток</span> <span>{remaining.toLocaleString()} ₽</span></div>
+                 <div className="flex justify-between items-center font-medium"><span>Сумма по заявке</span> <span>{budget.request.toLocaleString()} ₽</span></div>
+                <Separator />
+                <div className="flex justify-between items-center text-lg font-bold"><span>Остаток после операции</span> <span>{remainingAfter.toLocaleString()} ₽</span></div>
+                 {isOverBudget ? (
+                    <Alert variant="destructive">
+                        <AlertCircle className="h-4 w-4" />
+                        <AlertTitle>Превышение бюджета!</AlertTitle>
+                        <AlertDescription>
+                        Операция превышает доступный лимит по статье на <span className="font-bold">{Math.abs(remainingAfter).toLocaleString()} ₽</span>. Требуется дополнительное согласование.
+                        </AlertDescription>
+                    </Alert>
+                ) : (
+                     <Alert variant="success">
+                        <CheckCircle className="h-4 w-4" />
+                        <AlertTitle>В рамках бюджета</AlertTitle>
+                        <AlertDescription>
+                        Операция не превышает доступный лимит по статье.
+                        </AlertDescription>
+                    </Alert>
+                )}
+            </CardContent>
+        </Card>
+      </div>
+       <div>
+        <h3 className="text-lg font-medium flex items-center gap-2"><Users className="h-5 w-5"/>Маршрут согласования</h3>
+        <Card className="mt-2">
+             <CardContent className="pt-6">
+                <ul className="space-y-4">
+                    <li className="flex items-center gap-4">
+                        <div className="flex flex-col items-center justify-center h-10 w-10 rounded-full bg-green-100 text-green-700 font-bold">1</div>
+                        <div>
+                            <p className="font-medium">Иванов И.И.</p>
+                            <p className="text-sm text-muted-foreground">Непосредственный руководитель</p>
+                        </div>
+                    </li>
+                     <li className="flex items-center gap-4">
+                        <div className="flex flex-col items-center justify-center h-10 w-10 rounded-full bg-blue-100 text-blue-700 font-bold">2</div>
+                        <div>
+                            <p className="font-medium">Петров П.П.</p>
+                            <p className="text-sm text-muted-foreground">Руководитель ЦФО</p>
+                        </div>
+                    </li>
+                     <li className="flex items-center gap-4">
+                        <div className="flex flex-col items-center justify-center h-10 w-10 rounded-full bg-gray-100 text-gray-700 font-bold">3</div>
+                        <div>
+                            <p className="font-medium">Сидоров С.С.</p>
+                            <p className="text-sm text-muted-foreground">Финансовый контролер</p>
+                        </div>
+                    </li>
+                </ul>
+             </CardContent>
+        </Card>
+      </div>
+      <div className="flex justify-between mt-8">
+        <Button onClick={onBack} variant="outline">Назад</Button>
+        <Button>Отправить на согласование</Button>
+      </div>
+    </div>
+  );
+}
+
+
+export default function NewRequestPage() {
+  const [activeStep, setActiveStep] = useState(0);
+
+  const handleNext = () => setActiveStep((prev) => prev + 1);
+  const handleBack = () => setActiveStep((prev) => prev - 1);
+
+  const getStepContent = (step) => {
+    switch (step) {
+      case 0:
+        return <Step1 onNext={handleNext} />;
+      case 1:
+        return <Step2 onNext={handleNext} onBack={handleBack} />;
+      case 2:
+        return <Step3 onBack={handleBack} />;
+      default:
+        return "Unknown step";
+    }
+  };
+
+  return (
+    <Card>
+      <CardHeader>
+        <CardTitle>Новая заявка на расход</CardTitle>
+        <CardDescription>
+          Заполните форму для регистрации и согласования нового расхода.
+        </CardDescription>
+      </CardHeader>
+      <CardContent>
+        <Stepper activeStep={activeStep} alternativeLabel sx={{ marginBottom: 4 }}>
+          {steps.map((label) => (
+            <Step key={label}>
+              <StepLabel>{label}</StepLabel>
+            </Step>
+          ))}
+        </Stepper>
+        <div>{getStepContent(activeStep)}</div>
+      </CardContent>
+    </Card>
   );
 }

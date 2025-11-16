@@ -6,7 +6,7 @@ export const kpiData: Kpi[] = [
     value: '2.4 млрд ₽',
     change: -5.2,
     changeType: 'decrease',
-    status: 'success',
+    status: 'destructive',
   },
   {
     title: 'Заявок на согласовании',

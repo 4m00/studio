@@ -1,6 +1,9 @@
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { Badge } from "@/components/ui/badge";
 import { Progress } from "@/components/ui/progress";
+import GanttChart from "@/components/dashboard/gantt-chart";
+import { DollarSign, Target, TrendingUp, CheckCircle } from "lucide-react";
+
 
 const initiatives = [
     { id: 1, title: "Оптимизация логистических маршрутов", status: "В работе", progress: 65, economy: 45, economy_ytd: 28, department: "Служба логистики" },
@@ -11,56 +14,112 @@ const initiatives = [
 ];
 
 const statusColors: { [key: string]: string } = {
-  "В работе": "bg-yellow-500/20 text-yellow-700 border-yellow-500/30",
-  "Завершено": "bg-success/20 text-success-foreground border-success/30",
-  "Планируется": "bg-blue-500/20 text-blue-700 border-blue-500/30",
+  "В работе": "yellow",
+  "Завершено": "success",
+  "Планируется": "blue",
 };
 
+const portfolioKpis = {
+    totalEconomy: initiatives.reduce((sum, item) => sum + item.economy, 0),
+    ytdEconomy: initiatives.reduce((sum, item) => sum + item.economy_ytd, 0),
+    avgProgress: initiatives.reduce((sum, item) => sum + item.progress, 0) / initiatives.length,
+    completedCount: initiatives.filter(item => item.status === 'Завершено').length,
+}
+
+const formatter = new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', minimumFractionDigits: 0, maximumFractionDigits: 0 });
 
 export default function InitiativesPage() {
-    const formatter = new Intl.NumberFormat('ru-RU', { style: 'currency', currency: 'RUB', minimumFractionDigits: 0 });
 
   return (
     <div className="flex flex-col gap-8">
          <Card>
             <CardHeader>
-                <CardTitle>Инициативы по сокращению затрат</CardTitle>
+                <CardTitle>Портфель инициатив по повышению эффективности</CardTitle>
                 <CardDescription>
-                Обзор и отслеживание прогресса по инициативам, направленным на повышение эффективности.
+                Дашборд для контроля и анализа стратегических проектов по сокращению затрат.
                 </CardDescription>
             </CardHeader>
         </Card>
-        <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
-            {initiatives.map(initiative => (
-                 <Card key={initiative.id}>
-                    <CardHeader>
-                        <div className="flex justify-between items-start">
-                            <CardTitle className="text-lg">{initiative.title}</CardTitle>
-                            <Badge variant="outline" className={statusColors[initiative.status]}>{initiative.status}</Badge>
-                        </div>
-                        <CardDescription>{initiative.department}</CardDescription>
-                    </CardHeader>
-                    <CardContent className="space-y-4">
-                        <div>
-                            <div className="flex justify-between items-center mb-1">
-                                <span className="text-sm text-muted-foreground">Прогресс выполнения</span>
-                                <span className="text-sm font-semibold">{initiative.progress}%</span>
+
+        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Плановая годовая экономия</CardTitle>
+                    <Target className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">{formatter.format(portfolioKpis.totalEconomy * 1000000)}</div>
+                    <p className="text-xs text-muted-foreground">по всем инициативам</p>
+                </CardContent>
+            </Card>
+            <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Экономия с начала года (YTD)</CardTitle>
+                    <TrendingUp className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold text-success">{formatter.format(portfolioKpis.ytdEconomy * 1000000)}</div>
+                    <p className="text-xs text-muted-foreground">факт с начала года</p>
+                </CardContent>
+            </Card>
+             <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Средний прогресс</CardTitle>
+                     <div className="h-8 w-8 flex items-center justify-center rounded-full bg-blue-100"><Progress value={portfolioKpis.avgProgress} className="h-1 w-12 absolute" /></div>
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">{portfolioKpis.avgProgress.toFixed(0)}%</div>
+                     <p className="text-xs text-muted-foreground">по всем активным инициативам</p>
+                </CardContent>
+            </Card>
+             <Card>
+                <CardHeader className="flex flex-row items-center justify-between space-y-0 pb-2">
+                    <CardTitle className="text-sm font-medium">Завершено инициатив</CardTitle>
+                    <CheckCircle className="h-4 w-4 text-muted-foreground" />
+                </CardHeader>
+                <CardContent>
+                    <div className="text-2xl font-bold">{portfolioKpis.completedCount} / {initiatives.length}</div>
+                    <p className="text-xs text-muted-foreground">от общего числа</p>
+                </CardContent>
+            </Card>
+        </div>
+
+        <GanttChart />
+
+        <div>
+            <h2 className="text-2xl font-semibold tracking-tight mb-4">Список инициатив</h2>
+             <div className="grid gap-6 md:grid-cols-2 lg:grid-cols-3">
+                {initiatives.map(initiative => (
+                    <Card key={initiative.id} className="flex flex-col">
+                        <CardHeader>
+                            <div className="flex justify-between items-start">
+                                <CardTitle className="text-base font-bold">{initiative.title}</CardTitle>
+                                <Badge variant={statusColors[initiative.status]}>{initiative.status}</Badge>
                             </div>
-                            <Progress value={initiative.progress} className="h-2"/>
-                        </div>
-                        <div className="grid grid-cols-2 gap-4 text-sm">
-                            <div className="flex flex-col">
-                                <span className="text-muted-foreground">Плановая экономия</span>
-                                <span className="font-semibold">{formatter.format(initiative.economy * 1000000)}</span>
+                            <CardDescription>{initiative.department}</CardDescription>
+                        </CardHeader>
+                        <CardContent className="space-y-4 flex-grow">
+                            <div>
+                                <div className="flex justify-between items-center mb-1">
+                                    <span className="text-sm text-muted-foreground">Прогресс выполнения</span>
+                                    <span className="text-sm font-semibold">{initiative.progress}%</span>
+                                </div>
+                                <Progress value={initiative.progress} />
                             </div>
-                            <div className="flex flex-col">
-                                <span className="text-muted-foreground">Экономия с начала года (YTD)</span>
-                                <span className="font-semibold text-success">{formatter.format(initiative.economy_ytd * 1000000)}</span>
+                            <div className="grid grid-cols-2 gap-4 text-sm pt-2">
+                                <div className="flex flex-col p-3 bg-muted/50 rounded-md">
+                                    <span className="text-muted-foreground">План. экономия</span>
+                                    <span className="font-semibold">{formatter.format(initiative.economy * 1000000)}</span>
+                                </div>
+                                <div className="flex flex-col p-3 bg-muted/50 rounded-md">
+                                    <span className="text-muted-foreground">Экономия YTD</span>
+                                    <span className="font-semibold text-success">{formatter.format(initiative.economy_ytd * 1000000)}</span>
+                                </div>
                             </div>
-                        </div>
-                    </CardContent>
-                 </Card>
-            ))}
+                        </CardContent>
+                    </Card>
+                ))}
+            </div>
         </div>
     </div>
   );

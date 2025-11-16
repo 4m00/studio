@@ -1,81 +1,57 @@
-import {
-  Card,
-  CardContent,
-  CardHeader,
-  CardTitle,
-  CardDescription,
-} from "@/components/ui/card";
-import {
-  Table,
-  TableBody,
-  TableCell,
-  TableHead,
-  TableHeader,
-  TableRow,
-} from "@/components/ui/table";
-import { Progress } from "@/components/ui/progress";
-import { budgetDeviationsData } from "@/lib/mock-data";
-import { cn } from "@/lib/utils";
+import { KpiCard } from "@/components/dashboard/kpi-card";
+import { TrendingUp, TrendingDown, DollarSign, Goal, PlusCircle } from "lucide-react";
+import { Button } from "@/components/ui/button";
+import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
+import { BudgetDetailsTable } from "@/components/dashboard/budget-details-table";
 
 export default function BudgetingPage() {
-  const formatter = new Intl.NumberFormat('ru-RU', {
-    style: 'currency',
-    currency: 'RUB',
-    minimumFractionDigits: 0,
-  });
-
   return (
-    <Card>
-      <CardHeader>
-        <CardTitle>Бюджеты</CardTitle>
-        <CardDescription>
-          Обзор исполнения бюджетов по подразделениям.
-        </CardDescription>
-      </CardHeader>
-      <CardContent>
-        <Table>
-          <TableHeader>
-            <TableRow>
-              <TableHead>Подразделение</TableHead>
-              <TableHead className="text-right">План</TableHead>
-              <TableHead className="text-right">Факт</TableHead>
-              <TableHead>Исполнение</TableHead>
-              <TableHead className="text-right">Отклонение</TableHead>
-            </TableRow>
-          </TableHeader>
-          <TableBody>
-            {budgetDeviationsData.map((item) => {
-              const execution = (item.fact / item.plan) * 100;
-              return (
-                <TableRow key={item.department}>
-                  <TableCell className="font-medium">{item.department}</TableCell>
-                  <TableCell className="text-right">{formatter.format(item.plan * 1000000)}</TableCell>
-                  <TableCell className="text-right">{formatter.format(item.fact * 1000000)}</TableCell>
-                  <TableCell>
-                    <div className="flex items-center gap-2">
-                       <Progress value={execution} className={cn(execution > 100 ? "bg-destructive" : "bg-primary", "h-2")} />
-                       <span>{execution.toFixed(1)}%</span>
-                    </div>
-                  </TableCell>
-                  <TableCell
-                    className={cn(
-                      "text-right font-semibold",
-                      item.deviation > 5
-                        ? "text-destructive"
-                        : item.deviation < -5
-                        ? "text-success"
-                        : "text-warning"
-                    )}
-                  >
-                    {item.deviation > 0 ? "+" : ""}
-                    {item.deviation.toFixed(2)}%
-                  </TableCell>
-                </TableRow>
-              );
-            })}
-          </TableBody>
-        </Table>
-      </CardContent>
-    </Card>
-  );
+    <div className="flex flex-col gap-4">
+      <div className="grid grid-cols-1 gap-4 md:grid-cols-2 lg:grid-cols-4">
+        <KpiCard 
+          title="Общий бюджет"
+          value="$1,250,000"
+          icon={<DollarSign className="h-6 w-6 text-muted-foreground" />}
+          trend="+2% по сравнению с прошлым кварталом"
+        />
+        <KpiCard 
+          title="Освоено"
+          value="$780,500"
+          icon={<TrendingUp className="h-6 w-6 text-success" />}
+          trend="+15% по сравнению с планом"
+        />
+        <KpiCard 
+          title="Остаток"
+          value="$469,500"
+          icon={<TrendingDown className="h-6 w-6 text-destructive" />}
+          trend="-8% по сравнению с планом"
+        />
+        <KpiCard 
+          title="Уровень освоения"
+          value="62.4%"
+          icon={<Goal className="h-6 w-6 text-success" />}
+          trend="+2.4% по сравнению с планом"
+        />
+      </div>
+      <div className="flex items-center justify-between gap-4">
+        <Select defaultValue="all">
+          <SelectTrigger className="w-full max-w-xs">
+            <SelectValue placeholder="Выберите отдел" />
+          </SelectTrigger>
+          <SelectContent>
+            <SelectItem value="all">Все отделы</SelectItem>
+            <SelectItem value="production">Производство</SelectItem>
+            <SelectItem value="logistics">Логистика</SelectItem>
+            <SelectItem value="maintenance">Обслуживание</SelectItem>
+            <SelectItem value="hr">Кадры</SelectItem>
+          </SelectContent>
+        </Select>
+        <Button>
+          <PlusCircle className="mr-2 h-4 w-4" />
+          Создать бюджет
+        </Button>
+      </div>
+      <BudgetDetailsTable />
+    </div>
+  )
 }

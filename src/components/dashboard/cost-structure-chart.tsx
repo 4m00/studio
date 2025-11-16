@@ -1,13 +1,13 @@
 "use client";
 
 import * as React from "react";
-import { Pie, PieChart, ResponsiveContainer, Cell, Tooltip, Legend } from "recharts";
+import { Pie, PieChart, ResponsiveContainer, Cell } from "recharts";
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { costStructureData } from "@/lib/mock-data";
 import { ChartContainer, ChartTooltip, ChartTooltipContent, ChartLegend, ChartLegendContent } from "@/components/ui/chart";
 
 const chartConfig = {
-  costs: {
+  "costs": {
     label: "Затраты",
   },
   "Сырье": {
@@ -39,12 +39,15 @@ export function CostStructureChart({ className }: { className?: string }) {
 
   return (
     <Card className={className}>
-      <CardHeader>
+      <CardHeader className="items-center pb-0">
         <CardTitle>Структура затрат</CardTitle>
         <CardDescription>По основным категориям</CardDescription>
       </CardHeader>
-      <CardContent>
-        <ChartContainer config={chartConfig} className="h-[300px] w-full">
+      <CardContent className="flex-1 pb-0">
+        <ChartContainer
+          config={chartConfig}
+          className="mx-auto aspect-square max-h-[300px]"
+        >
           <ResponsiveContainer>
             <PieChart>
               <ChartTooltip
@@ -55,8 +58,9 @@ export function CostStructureChart({ className }: { className?: string }) {
                 data={costStructureData}
                 dataKey="value"
                 nameKey="name"
-                innerRadius={80}
+                innerRadius={60}
                 strokeWidth={5}
+                outerRadius={80}
               >
                 {costStructureData.map((entry, index) => (
                   <Cell key={`cell-${index}`} fill={chartConfig[entry.name as keyof typeof chartConfig]?.color} />
@@ -64,9 +68,9 @@ export function CostStructureChart({ className }: { className?: string }) {
               </Pie>
                <ChartLegend
                 content={<ChartLegendContent nameKey="name" />}
-                verticalAlign="middle"
-                align="right"
-                layout="vertical"
+                verticalAlign="bottom"
+                align="center"
+                layout="horizontal"
               />
             </PieChart>
           </ResponsiveContainer>
