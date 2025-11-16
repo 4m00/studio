@@ -9,6 +9,7 @@ import {
   ScrollText,
   Settings,
   Wallet,
+  User
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
@@ -35,6 +36,7 @@ const navItems = [
 ];
 
 const settingsNav = [
+    { href: "/profile", icon: User, label: "Профиль" },
     { href: "/settings", icon: Settings, label: "Настройки" },
 ]
 
