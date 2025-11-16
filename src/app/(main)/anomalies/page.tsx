@@ -28,11 +28,11 @@ import { cn } from "@/lib/utils";
 const statusConfig = {
   critical: {
     icon: AlertCircle,
-    color: "text-destructive",
+    color: "text-destructive border-destructive",
   },
   warning: {
     icon: AlertTriangle,
-    color: "text-warning",
+    color: "text-warning border-warning",
   },
 };
 
@@ -40,7 +40,7 @@ export default function AnomaliesPage() {
   return (
     <Card>
       <CardHeader>
-        <CardTitle>Аномалии</CardTitle>
+        <CardTitle>🤖 Интеллектуальный анализ аномалий</CardTitle>
         <CardDescription>
           Все автоматически выявленные отклонения и аномальные операции.
         </CardDescription>
@@ -67,7 +67,7 @@ export default function AnomaliesPage() {
                   <TableCell>{anomaly.description}</TableCell>
                   <TableCell>{anomaly.date}</TableCell>
                   <TableCell>
-                    <Badge variant="outline" className={cn(color, "capitalize border-current")}>
+                    <Badge variant="outline" className={cn(color, "capitalize")}>
                       <Icon className="mr-2 h-4 w-4" />
                       {anomaly.status === "critical" ? "Критическая" : "Предупреждение"}
                     </Badge>

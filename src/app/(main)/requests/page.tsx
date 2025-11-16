@@ -16,9 +16,9 @@ export default function RequestsPage() {
     <div className="flex flex-col gap-4">
       <div className="flex justify-between items-center">
         <div>
-          <h1 className="text-2xl font-semibold">Заявки</h1>
+          <h1 className="text-2xl font-semibold">Заявки на расходы</h1>
           <p className="text-muted-foreground">
-            Просмотр, создание и управление заявками на расходы.
+            Всего: 1,847
           </p>
         </div>
         <div className="flex items-center gap-2">
