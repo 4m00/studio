@@ -25,7 +25,7 @@ export default function SettingsPage() {
         </CardHeader>
       </Card>
 
-      <Tabs defaultValue="profile">
+      <Tabs defaultValue="profile" className="w-full">
         <TabsList className="grid w-full grid-cols-3">
           <TabsTrigger value="profile">Профиль</TabsTrigger>
           <TabsTrigger value="notifications">Уведомления</TabsTrigger>
@@ -88,9 +88,9 @@ export default function SettingsPage() {
                   <Label htmlFor="email-notifications" className="text-base">
                     Email-уведомления
                   </Label>
-                  <p className="text-sm text-muted-foreground">
+                  <span className="text-sm text-muted-foreground">
                     Получать уведомления о статусе заявок и аномалиях на почту.
-                  </p>
+                  </span>
                 </div>
                 <Switch id="email-notifications" defaultChecked />
               </div>
@@ -99,9 +99,9 @@ export default function SettingsPage() {
                   <Label htmlFor="push-notifications" className="text-base">
                     Push-уведомления
                   </Label>
-                  <p className="text-sm text-muted-foreground">
+                   <span className="text-sm text-muted-foreground">
                     Получать push-уведомления в браузере.
-                  </p>
+                  </span>
                 </div>
                 <Switch id="push-notifications" />
               </div>
@@ -110,9 +110,9 @@ export default function SettingsPage() {
                   <Label htmlFor="weekly-digest" className="text-base">
                     Еженедельный дайджест
                   </Label>
-                  <p className="text-sm text-muted-foreground">
+                  <span className="text-sm text-muted-foreground">
                     Получать еженедельную сводку по затратам и аномалиям.
-                  </p>
+                  </span>
                 </div>
                 <Switch id="weekly-digest" defaultChecked />
               </div>
@@ -134,9 +134,9 @@ export default function SettingsPage() {
                   <Label htmlFor="dark-theme" className="text-base">
                     Темная тема
                   </Label>
-                  <p className="text-sm text-muted-foreground">
+                  <span className="text-sm text-muted-foreground">
                     Переключиться на темную тему оформления.
-                  </p>
+                  </span>
                 </div>
                 <Switch id="dark-theme" />
               </div>
@@ -145,9 +145,9 @@ export default function SettingsPage() {
                   <Label htmlFor="language" className="text-base">
                     Язык
                   </Label>
-                  <p className="text-sm text-muted-foreground">
+                  <span className="text-sm text-muted-foreground">
                     Текущий язык интерфейса: Русский
-                  </p>
+                  </span>
                 </div>
                 <Button variant="outline">Изменить</Button>
               </div>

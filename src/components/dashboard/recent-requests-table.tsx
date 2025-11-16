@@ -26,11 +26,12 @@ import {
 import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 import { cn } from "@/lib/utils";
 
-const statusColors = {
-  Утверждено: "bg-success/20 text-success-foreground border-success/30 hover:bg-success/30",
-  "На согласовании": "bg-warning/20 text-warning-foreground border-warning/30 hover:bg-warning/30",
-  Отклонено: "bg-destructive/20 text-destructive-foreground border-destructive/30 hover:bg-destructive/30",
+const statusColors: { [key: string]: string } = {
+  Утверждено: "bg-success/20 text-success-foreground border-success/30",
+  "На согласовании": "bg-warning/20 text-warning-foreground border-warning/30",
+  Отклонено: "bg-destructive/20 text-destructive-foreground border-destructive/30",
 };
+
 
 export function RecentRequestsTable() {
   const formatter = new Intl.NumberFormat('ru-RU', {

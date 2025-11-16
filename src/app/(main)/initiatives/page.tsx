@@ -46,7 +46,7 @@ export default function InitiativesPage() {
                                 <span className="text-sm text-muted-foreground">Прогресс выполнения</span>
                                 <span className="text-sm font-semibold">{initiative.progress}%</span>
                             </div>
-                            <Progress value={initiative.progress} />
+                            <Progress value={initiative.progress} className="h-2"/>
                         </div>
                         <div className="grid grid-cols-2 gap-4 text-sm">
                             <div className="flex flex-col">
@@ -55,7 +55,7 @@ export default function InitiativesPage() {
                             </div>
                             <div className="flex flex-col">
                                 <span className="text-muted-foreground">Экономия с начала года (YTD)</span>
-                                <span className="font-semibold text-success">{formatter.format(initiative.economy_ytd * 1000000)}</span>
+                                <span className="font-semibold text-success-foreground">{formatter.format(initiative.economy_ytd * 1000000)}</span>
                             </div>
                         </div>
                     </CardContent>

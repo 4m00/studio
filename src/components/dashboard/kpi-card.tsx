@@ -5,13 +5,13 @@ import { ArrowDown, ArrowUp, TrendingUp, AlertCircle } from "lucide-react";
 
 export function KpiCard({ title, value, change, changeType, status }: Kpi) {
   const statusClasses = {
-    success: "text-success",
+    success: "text-success-foreground",
     warning: "text-warning",
     destructive: "text-destructive",
     neutral: "text-muted-foreground",
   };
   
-  const Icon = status === 'destructive' ? AlertCircle : TrendingUp;
+  const Icon = status === 'destructive' ? AlertCircle : changeType === 'increase' ? ArrowUp : ArrowDown;
 
   return (
     <Card>
@@ -22,8 +22,7 @@ export function KpiCard({ title, value, change, changeType, status }: Kpi) {
       <CardContent>
         <div className="text-2xl font-bold">{value}</div>
         {change !== 0 && (
-          <p className={cn("text-xs", statusClasses[status], "flex items-center gap-1")}>
-            {changeType === 'decrease' ? <ArrowDown className="h-3 w-3"/> : <ArrowUp className="h-3 w-3"/>}
+          <p className={cn("text-xs flex items-center gap-1", statusClasses[status])}>
             {change > 0 ? `+${change}` : change}% к прошлому месяцу
           </p>
         )}

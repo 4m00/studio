@@ -44,7 +44,7 @@ export function TopDeviationsWidget() {
                     item.deviation > 5
                       ? "text-destructive"
                       : item.deviation < -5
-                      ? "text-success"
+                      ? "text-success-foreground"
                       : "text-warning"
                   )}
                 >

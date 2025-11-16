@@ -25,7 +25,7 @@ export const kpiData: Kpi[] = [
   {
     title: 'Экономия от инициатив',
     value: '142 млн ₽ YTD',
-    change: 0,
+    change: 15,
     changeType: 'increase',
     status: 'success',
   },
