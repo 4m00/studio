@@ -3,30 +3,30 @@
 @tailwind utilities;
 
 body {
-  font-family: Arial, Helvetica, sans-serif;
+  font-family: 'Inter', sans-serif;
 }
 
 @layer base {
   :root {
-    --background: 210 40% 98%;
+    --background: 210 20% 98%; /* #f9fafb */
     --foreground: 224 71% 4%;
     --card: 0 0% 100%;
     --card-foreground: 224 71% 4%;
     --popover: 0 0% 100%;
     --popover-foreground: 224 71% 4%;
-    --primary: 222 68% 32%;
+    --primary: 222 68% 32%; /* #1e3a8a */
     --primary-foreground: 210 40% 98%;
     --secondary: 210 40% 96.1%;
     --secondary-foreground: 224 71% 4%;
     --muted: 210 40% 96.1%;
     --muted-foreground: 215 16% 47%;
-    --accent: 210 40% 96.1%;
-    --accent-foreground: 224 71% 4%;
-    --destructive: 0 84% 60%;
+    --accent: 158 79% 44%; /* #10b981 */
+    --accent-foreground: 210 40% 98%;
+    --destructive: 0 84% 60%; /* #ef4444 */
     --destructive-foreground: 210 40% 98%;
-    --success: 158 80% 42%;
+    --success: 158 79% 44%; /* #10b981 */
     --success-foreground: 210 40% 98%;
-    --warning: 38 92% 50%;
+    --warning: 38 92% 50%; /* #f59e0b */
     --warning-foreground: 210 40% 98%;
     --border: 214 32% 91%;
     --input: 214 32% 91%;

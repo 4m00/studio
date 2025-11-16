@@ -56,7 +56,7 @@ export default function RequestsPage() {
               <CardTitle>На согласовании</CardTitle>
             </CardHeader>
             <CardContent>
-              <p>Здесь будут заявки со статусом "На согласовании".</p>
+               <RecentRequestsTable />
             </CardContent>
           </Card>
         </TabsContent>
@@ -66,7 +66,7 @@ export default function RequestsPage() {
               <CardTitle>Утверждено</CardTitle>
             </CardHeader>
             <CardContent>
-              <p>Здесь будут утвержденные заявки.</p>
+               <RecentRequestsTable />
             </CardContent>
           </Card>
         </TabsContent>
@@ -76,7 +76,7 @@ export default function RequestsPage() {
               <CardTitle>Отклонено</CardTitle>
             </CardHeader>
             <CardContent>
-              <p>Здесь будут отклоненные заявки.</p>
+               <RecentRequestsTable />
             </CardContent>
           </Card>
         </TabsContent>
