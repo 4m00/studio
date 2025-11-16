@@ -42,7 +42,7 @@ export function AppSidebar() {
   const pathname = usePathname();
 
   return (
-    <Sidebar collapsible="icon" className="hidden md:flex">
+    <Sidebar collapsible="icon">
       <SidebarHeader className="h-14 items-center justify-center border-b group-data-[collapsible=icon]:justify-center">
         <Link href="/dashboard" className="flex items-center gap-2 font-semibold">
           <Icons.Logo className="h-6 w-6 text-primary" />

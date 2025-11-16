@@ -19,7 +19,7 @@ export default function AnalyticsPage() {
         <CostDynamicsChart className="lg:col-span-4" />
         <CostStructureChart className="lg:col-span-3" />
       </div>
-      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-3">
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-2">
         <TopDeviationsWidget />
         <RequestStatusFunnel />
       </div>

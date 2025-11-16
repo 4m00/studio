@@ -15,14 +15,15 @@ import { Avatar, AvatarFallback, AvatarImage } from "@/components/ui/avatar";
 export default function SettingsPage() {
   return (
     <div className="flex flex-col gap-8">
-       <Card>
-            <CardHeader>
-                <CardTitle>Настройки</CardTitle>
-                <CardDescription>
-                Управление вашим профилем, уведомлениями и другими параметрами системы.
-                </CardDescription>
-            </CardHeader>
-        </Card>
+      <Card>
+        <CardHeader>
+          <CardTitle>Настройки</CardTitle>
+          <CardDescription>
+            Управление вашим профилем, уведомлениями и другими параметрами
+            системы.
+          </CardDescription>
+        </CardHeader>
+      </Card>
 
       <Tabs defaultValue="profile">
         <TabsList className="grid w-full grid-cols-3">
@@ -34,33 +35,38 @@ export default function SettingsPage() {
           <Card>
             <CardHeader>
               <CardTitle>Профиль</CardTitle>
-              <CardDescription>
-                Редактирование личной информации.
-              </CardDescription>
+              <CardDescription>Редактирование личной информации.</CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-                <div className="flex items-center gap-4">
-                    <Avatar className="h-20 w-20">
-                        <AvatarImage src="https://picsum.photos/seed/100/80/80" data-ai-hint="person portrait" />
-                        <AvatarFallback>ИС</AvatarFallback>
-                    </Avatar>
-                    <Button variant="outline">Изменить фото</Button>
-                </div>
+              <div className="flex items-center gap-4">
+                <Avatar className="h-20 w-20">
+                  <AvatarImage
+                    src="https://picsum.photos/seed/100/80/80"
+                    data-ai-hint="person portrait"
+                  />
+                  <AvatarFallback>ИС</AvatarFallback>
+                </Avatar>
+                <Button variant="outline">Изменить фото</Button>
+              </div>
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="name">Имя</Label>
                   <Input id="name" defaultValue="Сергей" />
                 </div>
-                 <div className="space-y-2">
+                <div className="space-y-2">
                   <Label htmlFor="surname">Фамилия</Label>
                   <Input id="surname" defaultValue="Иванов" />
                 </div>
               </div>
               <div className="space-y-2">
                 <Label htmlFor="email">Email</Label>
-                <Input id="email" type="email" defaultValue="ivanov.s@company.ru" />
+                <Input
+                  id="email"
+                  type="email"
+                  defaultValue="ivanov.s@company.ru"
+                />
               </div>
-               <div className="space-y-2">
+              <div className="space-y-2">
                 <Label htmlFor="department">Подразделение</Label>
                 <Input id="department" defaultValue="Центральный офис" disabled />
               </div>
@@ -69,7 +75,7 @@ export default function SettingsPage() {
           </Card>
         </TabsContent>
         <TabsContent value="notifications">
-           <Card>
+          <Card>
             <CardHeader>
               <CardTitle>Уведомления</CardTitle>
               <CardDescription>
@@ -77,33 +83,45 @@ export default function SettingsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-                <div className="flex items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                        <Label htmlFor="email-notifications" className="text-base">Email-уведомления</Label>
-                        <p className="text-sm text-muted-foreground">Получать уведомления о статусе заявок и аномалиях на почту.</p>
-                    </div>
-                    <Switch id="email-notifications" defaultChecked />
+              <div className="flex items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <Label htmlFor="email-notifications" className="text-base">
+                    Email-уведомления
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Получать уведомления о статусе заявок и аномалиях на почту.
+                  </p>
                 </div>
-                 <div className="flex items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                        <Label htmlFor="push-notifications" className="text-base">Push-уведомления</p>
-                        <p className="text-sm text-muted-foreground">Получать push-уведомления в браузере.</p>
-                    </div>
-                    <Switch id="push-notifications" />
+                <Switch id="email-notifications" defaultChecked />
+              </div>
+              <div className="flex items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <Label htmlFor="push-notifications" className="text-base">
+                    Push-уведомления
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Получать push-уведомления в браузере.
+                  </p>
                 </div>
-                 <div className="flex items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                        <Label htmlFor="weekly-digest" className="text-base">Еженедельный дайджест</Label>
-                        <p className="text-sm text-muted-foreground">Получать еженедельную сводку по затратам и аномалиям.</p>
-                    </div>
-                    <Switch id="weekly-digest" defaultChecked />
+                <Switch id="push-notifications" />
+              </div>
+              <div className="flex items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <Label htmlFor="weekly-digest" className="text-base">
+                    Еженедельный дайджест
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Получать еженедельную сводку по затратам и аномалиям.
+                  </p>
                 </div>
-                <Button>Сохранить настройки</Button>
+                <Switch id="weekly-digest" defaultChecked />
+              </div>
+              <Button>Сохранить настройки</Button>
             </CardContent>
           </Card>
         </TabsContent>
-         <TabsContent value="system">
-           <Card>
+        <TabsContent value="system">
+          <Card>
             <CardHeader>
               <CardTitle>Система</CardTitle>
               <CardDescription>
@@ -111,20 +129,28 @@ export default function SettingsPage() {
               </CardDescription>
             </CardHeader>
             <CardContent className="space-y-6">
-                 <div className="flex items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                        <Label htmlFor="dark-theme" className="text-base">Темная тема</Label>
-                        <p className="text-sm text-muted-foreground">Переключиться на темную тему оформления.</p>
-                    </div>
-                    <Switch id="dark-theme" />
+              <div className="flex items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <Label htmlFor="dark-theme" className="text-base">
+                    Темная тема
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Переключиться на темную тему оформления.
+                  </p>
                 </div>
-                 <div className="flex items-center justify-between rounded-lg border p-4">
-                    <div className="space-y-0.5">
-                        <Label htmlFor="language" className="text-base">Язык</Label>
-                        <p className="text-sm text-muted-foreground">Текущий язык интерфейса: Русский</p>
-                    </div>
-                    <Button variant="outline">Изменить</Button>
+                <Switch id="dark-theme" />
+              </div>
+              <div className="flex items-center justify-between rounded-lg border p-4">
+                <div className="space-y-0.5">
+                  <Label htmlFor="language" className="text-base">
+                    Язык
+                  </Label>
+                  <p className="text-sm text-muted-foreground">
+                    Текущий язык интерфейса: Русский
+                  </p>
                 </div>
+                <Button variant="outline">Изменить</Button>
+              </div>
             </CardContent>
           </Card>
         </TabsContent>

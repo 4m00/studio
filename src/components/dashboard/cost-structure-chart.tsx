@@ -10,23 +10,23 @@ const chartConfig = {
   costs: {
     label: "Затраты",
   },
-  Сырье: {
+  "Сырье": {
     label: "Сырье",
     color: "hsl(var(--chart-1))",
   },
-  Персонал: {
+  "Персонал": {
     label: "Персонал",
     color: "hsl(var(--chart-2))",
   },
-  Энергия: {
+  "Энергия": {
     label: "Энергия",
     color: "hsl(var(--chart-3))",
   },
-  Ремонты: {
+  "Ремонты": {
     label: "Ремонты",
     color: "hsl(var(--chart-4))",
   },
-  Прочее: {
+  "Прочее": {
     label: "Прочее",
     color: "hsl(var(--chart-5))",
   },

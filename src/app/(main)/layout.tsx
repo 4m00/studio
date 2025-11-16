@@ -1,5 +1,6 @@
 import { Header } from "@/components/layout/header";
 import { AppSidebar } from "@/components/layout/sidebar";
+import { SidebarProvider } from "@/components/ui/sidebar";
 
 export default function MainLayout({
   children,
@@ -7,7 +8,7 @@ export default function MainLayout({
   children: React.ReactNode;
 }) {
   return (
-    <div className="flex min-h-screen w-full flex-col bg-muted/40">
+    <SidebarProvider>
       <AppSidebar />
       <div className="flex flex-col sm:gap-4 sm:py-4 sm:pl-14">
         <Header />
@@ -15,6 +16,6 @@ export default function MainLayout({
           {children}
         </main>
       </div>
-    </div>
+    </SidebarProvider>
   );
 }
