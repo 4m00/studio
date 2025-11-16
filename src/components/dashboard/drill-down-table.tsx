@@ -1,3 +1,4 @@
+'use client';
 import React from "react";
 import {
   Table,
@@ -26,7 +27,16 @@ const data = [
         { type: "category", name: "Персонал", plan: 150, fact: 140, deviation: -6.7 },
     ]
   },
-  { type: "cfo", name: "Добывающее предприятие №2", plan: 800, fact: 880, deviation: 10 },
+  {
+    type: "cfo",
+    name: "Добывающее предприятие №2",
+    plan: 800, fact: 880, deviation: 10,
+    children: [
+        { type: "category", name: "ФОТ", plan: 400, fact: 420, deviation: 5 },
+        { type: "category", name: "ГСМ", plan: 150, fact: 180, deviation: 20 },
+        { type: "category", name: "Запчасти", plan: 250, fact: 280, deviation: 12 },
+    ]
+  },
   { type: "cfo", name: "Служба логистики", plan: 120, fact: 135, deviation: 12.5 },
   { type: "cfo", name: "Центральный офис", plan: 200, fact: 180, deviation: -10 },
   { type: "cfo", name: "ИТ-департамент", plan: 80, fact: 75, deviation: -6.25 },
@@ -68,7 +78,7 @@ const DrillDownRow = ({ item, level, isExpanded, onToggle }) => {
 };
 
 export function DrillDownTable() {
-  const [expandedRows, setExpandedRows] = React.useState({ [data[0].name]: true });
+  const [expandedRows, setExpandedRows] = React.useState({ [data[0].name]: true, [data[1].name]: true });
 
   const toggleRow = (name) => {
     setExpandedRows(prev => ({ ...prev, [name]: !prev[name] }));

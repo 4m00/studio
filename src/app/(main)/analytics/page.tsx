@@ -1,3 +1,6 @@
+'use client';
+import dynamic from 'next/dynamic';
+import { useState } from 'react';
 import { Card, CardContent, CardHeader, CardTitle, CardDescription } from "@/components/ui/card";
 import { CostDynamicsChart } from "@/components/dashboard/cost-dynamics-chart";
 import { CostStructureChart } from "@/components/dashboard/cost-structure-chart";
@@ -8,10 +11,19 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CalendarIcon, Download, Filter } from "lucide-react";
 import { Label } from "@/components/ui/label";
 import { DrillDownTable } from "@/components/dashboard/drill-down-table";
-import { SpendHeatmap } from "@/components/dashboard/spend-heatmap";
+import { DateRange } from 'react-day-picker';
 
+const SpendHeatmap = dynamic(
+  () => import('@/components/dashboard/spend-heatmap').then(mod => mod.SpendHeatmap),
+  { ssr: false }
+);
 
 export default function AnalyticsPage() {
+  const [date, setDate] = useState<DateRange | undefined>({
+    from: new Date(new Date().getFullYear(), 0, 1),
+    to: new Date(new Date().getFullYear(), 11, 31),
+  });
+
   return (
     <div className="flex flex-col gap-6">
        <Card>
@@ -38,18 +50,24 @@ export default function AnalyticsPage() {
                             className="w-full justify-start text-left font-normal mt-1"
                             >
                             <CalendarIcon className="mr-2 h-4 w-4" />
-                            01.01.2025 - 31.12.2025
+                            {date?.from ? (
+                                date.to ? (
+                                    <>{date.from.toLocaleDateString()} - {date.to.toLocaleDateString()}</>
+                                ) : (
+                                    date.from.toLocaleDateString()
+                                )
+                                ) : (
+                                <span>Выберите дату</span>
+                            )}
                             </Button>
                         </PopoverTrigger>
                         <PopoverContent className="w-auto p-0" align="start">
                             <Calendar
                             initialFocus
                             mode="range"
-                            defaultMonth={new Date(2025, 0)}
-                            selected={{
-                                from: new Date(2025, 0, 1),
-                                to: new Date(2025, 11, 31),
-                            }}
+                            defaultMonth={date?.from}
+                            selected={date}
+                            onSelect={setDate}
                             numberOfMonths={2}
                             />
                         </PopoverContent>
@@ -63,6 +81,11 @@ export default function AnalyticsPage() {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">Все предприятия (5)</SelectItem>
+                            <SelectItem value="1">Предприятие 1</SelectItem>
+                            <SelectItem value="2">Предприятие 2</SelectItem>
+                            <SelectItem value="3">Предприятие 3</SelectItem>
+                            <SelectItem value="4">Предприятие 4</SelectItem>
+                            <SelectItem value="5">Предприятие 5</SelectItem>
                         </SelectContent>
                     </Select>
                  </div>
@@ -74,6 +97,10 @@ export default function AnalyticsPage() {
                         </SelectTrigger>
                         <SelectContent>
                             <SelectItem value="all">Все категории</SelectItem>
+                            <SelectItem value="office">Канцтовары</SelectItem>
+                            <SelectItem value="rent">Аренда</SelectItem>
+                            <SelectItem value="salary">Зарплата</SelectItem>
+                            <SelectItem value="marketing">Маркетинг</SelectItem>
                         </SelectContent>
                     </Select>
                  </div>

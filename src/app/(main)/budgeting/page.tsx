@@ -32,6 +32,24 @@ export default function BudgetingPage() {
           icon={<Goal className="h-6 w-6 text-success" />}
           trend="+2.4% по сравнению с планом"
         />
+        <KpiCard 
+          title="Прогноз перерасхода"
+          value="$50,000"
+          icon={<TrendingDown className="h-6 w-6 text-destructive" />}
+          trend="+5% по сравнению с прошлым прогнозом"
+        />
+        <KpiCard 
+          title="Экономия"
+          value="$25,000"
+          icon={<TrendingUp className="h-6 w-6 text-success" />}
+          trend="Новые инициативы по сокращению затрат"
+        />
+        <KpiCard 
+          title="Свободный денежный поток"
+          value="$150,000"
+          icon={<DollarSign className="h-6 w-6 text-muted-foreground" />}
+          trend="Улучшение операционной эффективности"
+        />
       </div>
       <div className="flex items-center justify-between gap-4">
         <Select defaultValue="all">
@@ -44,6 +62,8 @@ export default function BudgetingPage() {
             <SelectItem value="logistics">Логистика</SelectItem>
             <SelectItem value="maintenance">Обслуживание</SelectItem>
             <SelectItem value="hr">Кадры</SelectItem>
+            <SelectItem value="it">ИТ</SelectItem>
+            <SelectItem value="marketing">Маркетинг</SelectItem>
           </SelectContent>
         </Select>
         <Button>
