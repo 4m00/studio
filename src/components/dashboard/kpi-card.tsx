@@ -5,7 +5,7 @@ import { ArrowDown, ArrowUp, TrendingUp, AlertCircle } from "lucide-react";
 
 export function KpiCard({ title, value, change, changeType, status }: Kpi) {
   const statusClasses = {
-    success: "text-success-foreground",
+    success: "text-success",
     warning: "text-warning",
     destructive: "text-destructive",
     neutral: "text-muted-foreground",

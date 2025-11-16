@@ -53,7 +53,7 @@ export default function BudgetingPage() {
                   <TableCell className="text-right">{formatter.format(item.fact * 1000000)}</TableCell>
                   <TableCell>
                     <div className="flex items-center gap-2">
-                       <Progress value={execution} className={cn(execution > 100 && "bg-destructive", "h-2")} />
+                       <Progress value={execution} className={cn(execution > 100 ? "bg-destructive" : "bg-primary", "h-2")} />
                        <span>{execution.toFixed(1)}%</span>
                     </div>
                   </TableCell>
@@ -63,7 +63,7 @@ export default function BudgetingPage() {
                       item.deviation > 5
                         ? "text-destructive"
                         : item.deviation < -5
-                        ? "text-success-foreground"
+                        ? "text-success"
                         : "text-warning"
                     )}
                   >

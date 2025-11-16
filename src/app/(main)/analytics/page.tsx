@@ -10,6 +10,8 @@ import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@
 import { CalendarIcon, Download } from "lucide-react";
 import { RadioGroup, RadioGroupItem } from "@/components/ui/radio-group";
 import { Label } from "@/components/ui/label";
+import { kpiData } from "@/lib/mock-data";
+import { KpiCard } from "@/components/dashboard/kpi-card";
 
 export default function AnalyticsPage() {
   return (
@@ -84,6 +86,11 @@ export default function AnalyticsPage() {
           </CardDescription>
         </CardHeader>
       </Card>
+      <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-4">
+        {kpiData.map((kpi) => (
+          <KpiCard key={kpi.title} {...kpi} />
+        ))}
+      </div>
        <div className="grid gap-4 md:grid-cols-2 lg:grid-cols-7">
         <CostDynamicsChart className="lg:col-span-4" />
         <CostStructureChart className="lg:col-span-3" />

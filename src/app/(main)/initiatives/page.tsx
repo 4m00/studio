@@ -10,7 +10,7 @@ const initiatives = [
     { id: 5, title: "Аутсорсинг IT-поддержки 1-й линии", status: "Завершено", progress: 100, economy: 22, economy_ytd: 22, department: "ИТ-департамент" },
 ];
 
-const statusColors = {
+const statusColors: { [key: string]: string } = {
   "В работе": "bg-yellow-500/20 text-yellow-700 border-yellow-500/30",
   "Завершено": "bg-success/20 text-success-foreground border-success/30",
   "Планируется": "bg-blue-500/20 text-blue-700 border-blue-500/30",
@@ -36,7 +36,7 @@ export default function InitiativesPage() {
                     <CardHeader>
                         <div className="flex justify-between items-start">
                             <CardTitle className="text-lg">{initiative.title}</CardTitle>
-                            <Badge variant="outline" className={statusColors[initiative.status as keyof typeof statusColors]}>{initiative.status}</Badge>
+                            <Badge variant="outline" className={statusColors[initiative.status]}>{initiative.status}</Badge>
                         </div>
                         <CardDescription>{initiative.department}</CardDescription>
                     </CardHeader>
@@ -55,7 +55,7 @@ export default function InitiativesPage() {
                             </div>
                             <div className="flex flex-col">
                                 <span className="text-muted-foreground">Экономия с начала года (YTD)</span>
-                                <span className="font-semibold text-success-foreground">{formatter.format(initiative.economy_ytd * 1000000)}</span>
+                                <span className="font-semibold text-success">{formatter.format(initiative.economy_ytd * 1000000)}</span>
                             </div>
                         </div>
                     </CardContent>
