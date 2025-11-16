@@ -1,26 +1,18 @@
 "use client";
 
 import {
-  Bell,
   Book,
   Bot,
-  Building2,
-  ChevronLeft,
   GanttChartSquare,
-  Home,
   LayoutDashboard,
   LineChart,
-  LogOut,
-  PanelLeft,
   ScrollText,
   Settings,
-  Users,
   Wallet,
 } from "lucide-react";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 
-import { cn } from "@/lib/utils";
 import {
   Sidebar,
   SidebarContent,
@@ -30,9 +22,7 @@ import {
   SidebarMenuButton,
   SidebarFooter,
 } from "@/components/ui/sidebar";
-import { Button } from "@/components/ui/button";
 import { Icons } from "@/components/icons";
-import { Avatar, AvatarFallback, AvatarImage } from "../ui/avatar";
 
 const navItems = [
   { href: "/dashboard", icon: LayoutDashboard, label: "Дашборд" },
@@ -76,7 +66,7 @@ export function AppSidebar() {
           ))}
         </SidebarMenu>
       </SidebarContent>
-      <SidebarFooter className="border-t">
+      <SidebarFooter className="border-t p-2">
         <SidebarMenu>
             {settingsNav.map((item) => (
                  <SidebarMenuItem key={item.href}>
